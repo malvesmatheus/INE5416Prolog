@@ -215,6 +215,12 @@ max([X|Xs], R):-
     max(Xs, T),
     (X > T -> R = X ; R = T).
 
+%Retorna o menor valor
+min([R], R).
+min([X|Xs], R):-
+    min(Xs, T),
+    (X < T -> R = X ; R = T).
+
 %Fim
 
 
@@ -260,3 +266,7 @@ quantidade_de_posreq(DISC, QUANTIA) :-
 %Retorna a Disciplina que é pre-requisito para a maior quantia de disciplinas .
 maiorposreq(N) :- findall(Z, quantidade_de_posreq(_, Z), QtdPre),
     max(QtdPre, K), quantidade_de_posreq(N, K).
+
+%Retorna a Disciplina que tem a menor quantia de pre-requisitos.
+menorprereq(N) :- findall(Z, quantidade_de_prereq(_, Z), QtdPre),
+    min(QtdPre, K), quantidade_de_prereq(N, K).
