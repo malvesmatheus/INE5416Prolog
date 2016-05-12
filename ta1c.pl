@@ -245,15 +245,18 @@ disciplinas_sao_prereq(L,DISC):-setof(X, todos_prereq(DISC, X), L).
 %Retorna a quantia de pré-requisitos de uma determinada disciplina
 quantidade_de_prereq(DISC,QUANTIA) :- disciplinas_sao_prereq(L,DISC),listlen(L, QUANTIA).
 
-%Gera Lista com todas as ocorrencias de uma disciplina disciplina.
+%Retorna a Disciplina que tem a maior quantia de pre-requisitos.
 maiorprereq(N) :- findall(Z, quantidade_de_prereq(_, Z), QtdPre),
     max(QtdPre, K), quantidade_de_prereq(N, K).
 
 %Gera Lista com Pós-requisitos de uma disciplinas.
 pos_req_de_uma_disciplina(L, DISC) :-
-    findall(X, todos_prereq(X, DISC), L).
+    setof(X, todos_prereq(X, DISC), L).
 
 %Retorna quantia de matérias que são pós requisitos.
 quantidade_de_posreq(DISC, QUANTIA) :-
     pos_req_de_uma_disciplina(L, DISC),
     listlen(L, QUANTIA).
+%Retorna a Disciplina que é pre-requisito para a maior quantia de disciplinas .
+maiorposreq(N) :- findall(Z, quantidade_de_posreq(_, Z), QtdPre),
+    max(QtdPre, K), quantidade_de_posreq(N, K).
