@@ -249,3 +249,11 @@ quantidade_de_prereq(DISC,QUANTIA) :- disciplinas_sao_prereq(L,DISC),listlen(L, 
 maiorprereq(N) :- findall(Z, quantidade_de_prereq(_, Z), QtdPre),
     max(QtdPre, K), quantidade_de_prereq(N, K).
 
+%Gera Lista com Pós-requisitos de uma disciplinas.
+pos_req_de_uma_disciplina(L, DISC) :-
+    findall(X, todos_prereq(X, DISC), L).
+
+%Retorna quantia de matérias que são pós requisitos.
+quantidade_de_posreq(DISC, QUANTIA) :-
+    pos_req_de_uma_disciplina(L, DISC),
+    listlen(L, QUANTIA).
