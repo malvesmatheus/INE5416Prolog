@@ -167,6 +167,7 @@ fase_tp(FASE, DISC, PRE) :-
 	fase(DISC, FASE), 
 	prereq(DISC, PRE).
 
+%Disciplinas de uma determinada fase sem informar pré-requisito
 fase_teste(FASE, DISC) :- 
 	fase(DISC, FASE), 
 	prereq(DISC, _).
@@ -175,6 +176,7 @@ fase_teste(FASE, DISC) :-
 fase_sp(FASE, PRE, DISC) :- 
 	fase(PRE, FASE), 
 	posreq(PRE, DISC).
+%Disciplinas de uma determinada fase sem informar pós-requisitos
 fase_spt(FASE, DISC) :- 
 	fase(DISC, FASE), 
 	posreq(DISC, _).
@@ -187,27 +189,45 @@ fase_pc(FASE, DISC_1, DISC_2, PRE_COMUM, POS_DISC_1, POS_DISC_2) :-
 	posreq(DISC_2, POS_DISC_2), 
 	DISC_1 \= DISC_2.
 
+%Funcoes Pré-Definidas
+%Retorna o tamanho da lista
+
 lenacc([ ], A, A).
 lenacc([H|T], A, N) :- A1 is A + 1, lenacc(T, A1, N).
 listlen(L, N) :- lenacc(L, 0, N).
 
+%Concatena lista T com lista L2 e retorna Lista R
 append([ ], L, L).
 append([H|T], L2, [H|R]) :- append(T, L2, R).
 
+%Fim
+
+
+%Encontra todas as disciplinas de uma determinada fase
 disciplinas_de_uma_fase(FASE, L) :- findall(X, fase(X, FASE), L).
 
+%Retorna a quantidade de disciplinas de uma determinada fase
 quantidade_de_disciplinas(FASE, N) :- disciplinas_de_uma_fase(FASE,L), listlen(L, N).
 
+%Retorna o valor de todas as disciplinas do curso, desde a fase 1 até a fase 8
 disciplinas_no_curso(N) :- quantidade_de_disciplinas(_, N).
 
+%Encontra todas as disciplinas que possuem pré-requisitos
 disciplinas_com_prereq(L) :-  setof(X, FASE ^ fase_teste(FASE,X), L).
 
-disciplinas_sao_posreq(L) :-  setof(X, FASE ^ fase_spt(FASE,X), L).
+%Encontra todas as disciplinas são pós
+disciplinas_tem_posreq(L) :-  setof(X, FASE ^ fase_spt(FASE,X), L).
 
+%Retorna a quantia de disciplinas que possuem pré-requisitos
 quantidade_tem_prereq(N) :- disciplinas_com_prereq(R), listlen(R, N).
 
-quantidade_sao_posreq(N) :- disciplinas_sao_posreq(R), listlen(R, N).
+%Retorna a quantia de disciplinas que são pré-requisitos
+quantidade_sao_posreq(N) :- disciplinas_tem_posreq(R), listlen(R, N).
 
+%Retorna as disciplinas que são pré-requisitos de uma determinada disciplina
 disciplinas_sao_prereq(L,DISC):-setof(PRE, DISC ^ todos_prereq(DISC,PRE),L).
+
+%Retorna a quantia de pré-requisitos de uma determinada disciplina
 quantidade_de_prereq(N,DISC) :- disciplinas_sao_prereq(R,DISC), listlen(R, N).
-maior_de_prereq(N) :- disciplinas_sao_prereq(R,_), listlen(R, N).
+
+maior_de_prereq(N) :- quantidade_de_prereq(N,_), listlen(R, N).
