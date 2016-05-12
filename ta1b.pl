@@ -159,6 +159,15 @@ pre_comum(DISC_1, DISC_2, FASE) :-
 	prereq(DISC_2, PRE),
 	DISC_1 \= DISC_2.
 
+%Duas disciplinas que possuem pre-requisito comum e são da mesma fase
+pre_comum(DISC_1, DISC_2, PRE, FASE) :-
+	fase(DISC_1, FASE),
+	fase(DISC_2, FASE),	
+	prereq(DISC_1, PRE),
+	prereq(DISC_2, PRE),
+	DISC_1 \= DISC_2.
+
+
 %Facilitador de compreensão, se uma disciplina é pre requisito de outra, outra é "pós" requisito de uma
 posreq(X, Y) :- prereq(Y, X).
 
@@ -230,4 +239,8 @@ disciplinas_sao_prereq(L,DISC):-setof(PRE, DISC ^ todos_prereq(DISC,PRE),L).
 %Retorna a quantia de pré-requisitos de uma determinada disciplina
 quantidade_de_prereq(N,DISC) :- disciplinas_sao_prereq(R,DISC), listlen(R, N).
 
-maior_de_prereq(N) :- quantidade_de_prereq(N,_), listlen(R, N).
+%Gera Lista com todas as ocorrencias de uma disciplina disciplina.
+maiorprereq(L,DISC) :- findall(DISC ,pre_comum(_,_,DISC,_),L).
+
+%Quantia de Ocorrencias na lista de maior prereq.
+maior_de_prereq(N) :- quantidade_de_prereq(N,_).
