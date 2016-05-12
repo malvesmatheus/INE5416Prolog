@@ -209,6 +209,12 @@ listlen(L, N) :- lenacc(L, 0, N).
 append([ ], L, L).
 append([H|T], L2, [H|R]) :- append(T, L2, R).
 
+%Retorna o maior valor
+max([R], R).
+max([X|Xs], R):-
+    max(Xs, T),
+    (X > T -> R = X ; R = T).
+
 %Fim
 
 
@@ -234,12 +240,12 @@ quantidade_tem_prereq(N) :- disciplinas_com_prereq(R), listlen(R, N).
 quantidade_sao_posreq(N) :- disciplinas_tem_posreq(R), listlen(R, N).
 
 %Retorna as disciplinas que são pré-requisitos de uma determinada disciplina
-disciplinas_sao_prereq(L,DISC):-setof(PRE, DISC ^ todos_prereq(DISC,PRE),L).
+disciplinas_sao_prereq(L,DISC):-setof(X, todos_prereq(DISC, X), L).
 
 %Retorna a quantia de pré-requisitos de uma determinada disciplina
-quantidade_de_prereq(N,DISC) :- disciplinas_sao_prereq(R,DISC), listlen(R, N).
+quantidade_de_prereq(DISC,QUANTIA) :- disciplinas_sao_prereq(L,DISC),listlen(L, QUANTIA).
 
 %Gera Lista com todas as ocorrencias de uma disciplina disciplina.
-maiorprereq(N) :- findall(X, fase_spt(_, X), N).
+maiorprereq(N) :- findall(Z, quantidade_de_prereq(_, Z), QtdPre),
+    max(QtdPre, K), quantidade_de_prereq(N, K).
 
-maior_de_prereq(N) :- quantidade_de_prereq(N,_).
