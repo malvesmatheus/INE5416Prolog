@@ -240,7 +240,6 @@ disciplinas_sao_prereq(L,DISC):-setof(PRE, DISC ^ todos_prereq(DISC,PRE),L).
 quantidade_de_prereq(N,DISC) :- disciplinas_sao_prereq(R,DISC), listlen(R, N).
 
 %Gera Lista com todas as ocorrencias de uma disciplina disciplina.
-maiorprereq(L,DISC) :- findall(DISC ,pre_comum(_,_,DISC,_),L).
+maiorprereq(N) :- findall(X, fase_spt(_, X), N).
 
-%Quantia de Ocorrencias na lista de maior prereq.
 maior_de_prereq(N) :- quantidade_de_prereq(N,_).
