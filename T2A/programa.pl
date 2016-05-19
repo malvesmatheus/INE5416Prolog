@@ -134,6 +134,7 @@ changeLast(Id,NOVOX, NOVOY) :-
     nth0(2, Elem, L), % Y
     remove(K, J, L),
     assertz(xy(Id, NOVOX, NOVOY)).
+
 remove :-
     write('remove(Id,X,Y). -> Remove o deslocamento de <Id>'), nl,
     write('removeAll(Id).  -> Remove todos os pontos e deslocamentos de <Id>').
@@ -159,6 +160,19 @@ commit :-
     listing(xy),
     tell(Screen),
     close(Stream).
+
+quadrado(Id, POSX, POSY, TAMANHO) :-
+    NTAMANHO is TAMANHO*(-1),
+    new(Id, POSX, POSY),
+    new(Id, TAMANHO, 0),
+    new(Id, 0, TAMANHO),
+    new(Id, NTAMANHO, 0).
+triangulo(Id, ALTURA, POSX, POSY) :-
+
+    NPOSY is POSY*(-1),
+    new(Id, POSY, POSX),
+    new(Id, POSY, ALTURA), %Base Direita
+    new(Id, NPOSY, 0).     %Base Esquerda
 
 % Exibe menu principal
 menu :-
