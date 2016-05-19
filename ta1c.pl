@@ -202,7 +202,7 @@ fase_pc(FASE, DISC_1, DISC_2, PRE_COMUM, POS_DISC_1, POS_DISC_2) :-
 %Retorna o tamanho da lista
 
 lenacc([ ], A, A).
-lenacc([H|T], A, N) :- A1 is A + 1, lenacc(T, A1, N).
+lenacc([_|T], A, N) :- A1 is A + 1, lenacc(T, A1, N).
 listlen(L, N) :- lenacc(L, 0, N).
 
 %Concatena lista T com lista L2 e retorna Lista R
@@ -270,3 +270,11 @@ maiorposreq(N) :- findall(Z, quantidade_de_posreq(_, Z), QtdPre),
 %Retorna a Disciplina que tem a menor quantia de pre-requisitos.
 menorprereq(N) :- findall(Z, quantidade_de_prereq(_, Z), QtdPre),
     min(QtdPre, K), quantidade_de_prereq(N, K).
+%Gera um encadeamento de uma determinada disciplina e seus pre-requisitos
+seq(X,[]) :- \+todos_prereq(X,_).
+seq(X,[Y|L]) :- todos_prereq(X,Y), seq(Y,L).
+%Retorna o tamanho de um encadeamento
+quantiaenc(N,ENC,Y) :- setof(X, seq(X,Y), ENC),listlen(ENC,N).
+%Retorna a Disciplina, o seu encadeamento e o tamanho, quando ela tiver o maior encadeamento.
+maxencad(DISC,LISTAENC,QUANTIA) :- findall(X, quantiaenc(X,_,_),QTDTEMP),
+ max(QTDTEMP,QUANTIA), quantiaenc(QUANTIA,LISTAENC,DISC).
