@@ -1,3 +1,3 @@
 # INE5416Prolog
 
-# Trabalho 1 parte C de Prolog Adicionado ao cco.pl
+# Repositório de armazenamento das atividades da disciplina INE5416 - na parte de prolog do semestrre 2016.1
